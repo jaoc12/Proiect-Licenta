@@ -1,0 +1,12 @@
+﻿@model Licenta.Models.Solve
+@{
+    ViewBag.Title = "Solve a Sudoku";
+}
+
+<h2>@ViewBag.Title</h2>
+
+@using (Html.BeginForm("New", "Image", null, FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    <input type="file" name="upload" />
+    <input type="submit" />
+}

@@ -1,0 +1,30 @@
+﻿@model Licenta.Models.Sudoku
+@{
+    ViewBag.Title = "Solved Sudoku";
+}
+
+<h2>@ViewBag.Title</h2>
+
+<div class="container">
+    @for (int i = 0; i < 9; i++)
+    {
+        <div class="row">
+            @for (int j = 0; j < 9; j++)
+            {
+                <div class="col-sm-1 px-0">
+                    @{
+                        string cell = Model.Grid[i * 9 + j].ToString();
+                        if (Model.Original[i * 9 + j] == false)
+                        {
+                            @Html.DisplayFor(s => cell, new { htmlAttributes = new { @class = "not_original" } })
+                        }
+                        else
+                        {
+                            @Html.DisplayFor(s => cell)
+                        }
+                    }
+                </div>
+            }
+        </div>
+    }
+</div>
