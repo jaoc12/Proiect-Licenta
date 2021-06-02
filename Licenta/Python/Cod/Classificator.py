@@ -26,24 +26,25 @@ class Classificator:
         self.test_data = []
         self.test_label = []
 
-        for digit in range(1, 10):
-            print(digit)
-            # primele 4/5 imagini sunt folosite pentru antrenare
-            for it in range(2400):
-                self.train_data.append(cv2.imread(self.data_path + str(digit) + '/' + str(it) + '.jpg',
-                                       cv2.IMREAD_GRAYSCALE))
-                self.train_label.append(digit)
-            # ultimele 1/5 imagini sunt folosite pentru testare
-            for it in range(2400, 3000):
-                self.test_data.append(cv2.imread(self.data_path + str(digit) + '/' + str(it) + '.jpg',
-                                      cv2.IMREAD_GRAYSCALE))
-                self.test_label.append(digit)
+        if os.path.exists(self.hog_train_path) is False or os.path.exists(self.hog_test_path) is False:
+            for digit in range(1, 10):
+                print(digit)
+                # primele 4/5 imagini sunt folosite pentru antrenare
+                for it in range(2400):
+                    self.train_data.append(cv2.imread(self.data_path + str(digit) + '/' + str(it) + '.jpg',
+                                           cv2.IMREAD_GRAYSCALE))
+                    self.train_label.append(digit)
+                # ultimele 1/5 imagini sunt folosite pentru testare
+                for it in range(2400, 3000):
+                    self.test_data.append(cv2.imread(self.data_path + str(digit) + '/' + str(it) + '.jpg',
+                                          cv2.IMREAD_GRAYSCALE))
+                    self.test_label.append(digit)
 
-        self.train_data = np.array(self.train_data)
-        self.train_label = np.array(self.train_label)
+            self.train_data = np.array(self.train_data)
+            self.train_label = np.array(self.train_label)
 
-        self.test_data = np.array(self.test_data)
-        self.test_label = np.array(self.test_label)
+            self.test_data = np.array(self.test_data)
+            self.test_label = np.array(self.test_label)
 
     def get_hog(self, data):
         """

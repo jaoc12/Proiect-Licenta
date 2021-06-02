@@ -3,28 +3,29 @@
     ViewBag.Title = "Solved Sudoku";
 }
 
-<h2>@ViewBag.Title</h2>
+<br />
+<br />
+<p>Solutia gasita pentru datele date. Fundal albastru inseamna ca celula era data, iar fundal verde inseamna ca celula a fost gasita.</p>
 
-<div class="container">
-    @for (int i = 0; i < 9; i++)
+<table class="table table-bordered">
+    @for(int i=0; i < 9; i++)
     {
-        <div class="row">
+        <tr>
             @for (int j = 0; j < 9; j++)
             {
-                <div class="col-sm-1 px-0">
-                    @{
-                        string cell = Model.Grid[i * 9 + j].ToString();
-                        if (Model.Original[i * 9 + j] == false)
-                        {
-                            @Html.DisplayFor(s => cell, new { htmlAttributes = new { @class = "not_original" } })
-                        }
-                        else
-                        {
-                            @Html.DisplayFor(s => cell)
-                        }
-                    }
-                </div>
+                if (Model.Original[i * 9 + j] == true)
+                {
+                    <td class="bg-primary">
+                        @Html.DisplayFor(sudoku => sudoku.Grid[i * 9 + j])
+                    </td>
+                }
+                else
+                {
+                    <td class="bg-success">
+                        @Html.DisplayFor(sudoku => sudoku.Grid[i * 9 + j])
+                    </td>
+                }
             }
-        </div>
+        </tr>
     }
-</div>
+</table>

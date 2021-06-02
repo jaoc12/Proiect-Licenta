@@ -3,7 +3,9 @@
     ViewBag.Title = "Detected Sudoku";
 }
 
-<h2>@ViewBag.Title</h2>
+<br />
+<br />
+<p>Am gasit urmatorul Sudoku in poza, daca doresti poti modifica valorile gasite.</p>
 
 @using (Html.BeginForm(actionName: "Solution", controllerName: "Solve"))
 {
@@ -26,6 +28,6 @@
         }
     </div>
 
-    <button class="btn btn-primary" type="submit">Solve</button>
+    <button class="btn btn-primary" type="submit">Solutie</button>
 }
 <br />
