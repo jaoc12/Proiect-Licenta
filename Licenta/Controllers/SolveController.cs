@@ -3,9 +3,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using System.Net;
-using System.Web;
 using System.Web.Mvc;
 
 namespace Licenta.Controllers
@@ -85,15 +83,18 @@ namespace Licenta.Controllers
             {
                 for(int j = 0; j < 9; j++)
                 {
-                    for(int k=0; k < 9; k++)
+                    if (sudoku.Grid[i * 9 + j] != 0)
                     {
-                        if(sudoku.Grid[i*9 + j] == sudoku.Grid[i*9 + k] && j != k)
+                        for (int k = 0; k < 9; k++)
                         {
-                            return false;
-                        }
-                        if(sudoku.Grid[i + j*9] == sudoku.Grid[i + k*9] && j != k)
-                        {
-                            return false;
+                            if (sudoku.Grid[i * 9 + j] == sudoku.Grid[i * 9 + k] && j != k)
+                            {
+                                return false;
+                            }
+                            if (sudoku.Grid[i + j * 9] == sudoku.Grid[i + k * 9] && j != k)
+                            {
+                                return false;
+                            }
                         }
                     }
                 }
@@ -112,7 +113,8 @@ namespace Licenta.Controllers
                             int jCell1 = j_square * 3 + i % 3;
                             int iCell2 = i_square * 3 + j / 3;
                             int jCell2 = j_square * 3 + j % 3;
-                            if(i != j && sudoku.Grid[iCell1*9 + jCell1] == sudoku.Grid[iCell2*9 + jCell2])
+                            if(i != j && sudoku.Grid[iCell1*9 + jCell1] != 0 &&
+                                sudoku.Grid[iCell1*9 + jCell1] == sudoku.Grid[iCell2*9 + jCell2])
                             {
                                 return false;
                             }

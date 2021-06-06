@@ -30,8 +30,8 @@ class Sudoku:
                 flag = True
             while self.double_hidden() is True:
                 flag = True
-            #if flag is False:
-                #self.backtrack()
+            if flag is False:
+                self.backtrack()
 
     def backtrack(self):
         solvable_flag = True
