@@ -1,8 +1,8 @@
-from PIL import Image
-from PIL import ImageFont
-from PIL import ImageDraw
 import random
-import os
+
+from PIL import Image
+from PIL import ImageDraw
+from PIL import ImageFont
 
 digit_path = "../Date/Dataset/"
 

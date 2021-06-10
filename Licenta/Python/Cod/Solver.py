@@ -19,7 +19,7 @@ class Sudoku:
     def print(self):
         print(self.grid)
 
-    def solve_grid(self, grid):
+    def solve_grid(self):
         while self.check_is_complete(type="complete") is False:
             flag = False
             while self.single_possibility() is True:
@@ -96,7 +96,6 @@ class Sudoku:
         updateaza matricea de posibilitati la fiecare celula gasita
         :return: True daca a gasit ceva sau False
         """
-        flag = False
         for i in range(self.N):
             for j in range(self.N):
                 if self.grid[i][j] == 0 and self.possibilites_grid[i][j] < 10:
@@ -250,7 +249,6 @@ class Sudoku:
         :return: True sau False
         """
         for i in range(self.N):
-            double_value = ""
             row = self.possibilites_grid[i]
             for it, cell in enumerate(row):
                 if len(str(cell)) > 2:
@@ -275,7 +273,6 @@ class Sudoku:
                                     return True
 
         for i in range(self.N):
-            double_value = ""
             column = self.possibilites_grid[:, i]
             for it, cell in enumerate(column):
                 if len(str(cell)) > 2:
@@ -301,7 +298,6 @@ class Sudoku:
 
         for i_square in range(3):
             for j_square in range(3):
-                double_value = ""
                 square = self.possibilites_grid[i_square * 3:(i_square + 1) * 3, j_square * 3:(j_square + 1) * 3]
                 for i in range(3):
                     for j in range(3):
@@ -336,7 +332,7 @@ class Sudoku:
     def check_is_complete(self, type):
         """
         verifica daca un puzzle sudoku este terminat
-        :param grid: sudoku 9*9
+        :param type: tipul de verificare
         :return: true sau false
         """
         if type == "complete":
@@ -432,6 +428,7 @@ class Sudoku:
     def check_grid(self, type):
         """
         verifica ca intreaga tabla de joc sa fie corecta
+        :param type: tipul de verificare
         :return: true sau false
         """
         for i in range(self.N):
@@ -449,7 +446,7 @@ class Sudoku:
         """
         verifica daca un rand este corect
         :param i: al catelea rand este verificat
-        :param grid: puzzle sudoku 9*9
+        :param type: tipul de verificare
         :return: true sau false
         """
         row = self.grid[i]
@@ -460,7 +457,7 @@ class Sudoku:
         """
         verifica daca o coloana este corecta
         :param i: a cata coloana este verificata
-        :param grid: puzzle sudoku 9*9
+        :param type: tipul de verificare
         :return: true sau false
         """
         column = self.grid[:, i]
@@ -472,7 +469,7 @@ class Sudoku:
         verifica daca un patrat este corect
         :param i: pe ce linie este patratul (0-2)
         :param j: pe ce coloana este patratul (0-2)
-        :param grid: puzzle sudoku 9*9
+        :param type: tipul de verificare
         :return: true sau false
         """
         square = self.grid[i*3:(i+1)*3, j*3:(j+1)*3]
@@ -480,10 +477,12 @@ class Sudoku:
         return self.check_array(square, type=type, given_possibilities_array=square_possibilities)
 
     @staticmethod
-    def check_array(given_array, type, given_possibilities_array = None):
+    def check_array(given_array, type, given_possibilities_array=None):
         """
         verifica daca exista duplicate pentru orice numar diferit de zero
-        :param given_array:
+        :param given_array: un vector de valori
+        :param type: tipul de verificare
+        :param given_possibilities_array: un vector de posibilitati
         :return: True sau False
         """
         if type == "complete":
@@ -500,43 +499,6 @@ class Sudoku:
         return True
 
 
-# se rezolva fara bkt
-# grid = np.array([[1, 4, 5, 3, 2, 7, 6, 9, 8],
-#                 [0, 0, 0, 6, 5, 4, 0, 2, 7],
-#                 [6, 0, 0, 9, 1, 8, 5, 4, 3],
-#                 [4, 9, 6, 1, 8, 5, 3, 7, 2],
-#                 [2, 1, 8, 4, 7, 3, 9, 5, 6],
-#                 [7, 5, 0, 2, 9, 6, 4, 8, 1],
-#                 [3, 6, 0, 5, 4, 2, 8, 1, 9],
-#                 [0, 8, 4, 7, 6, 1, 0, 3, 5],
-#                 [5, 2, 1, 8, 3, 9, 7, 6, 4]])
-
-
-# se rezolva fara bkt
-# grid = np.array([
-#     [4, 0, 0, 0, 0, 5, 0, 0, 0],
-#     [0, 0, 0, 0, 0, 0, 1, 9, 8],
-#     [3, 0, 0, 0, 8, 2, 4, 0, 0],
-#     [0, 0, 0, 1, 0, 0, 0, 8, 0],
-#     [9, 0, 3, 0, 0, 0, 0, 0, 0],
-#     [0, 0, 0, 0, 3, 0, 6, 7, 0],
-#     [0, 5, 0, 0, 0, 9, 0, 0, 0],
-#     [0, 0, 0, 2, 0, 0, 9, 0, 7],
-#     [6, 4, 0, 3, 0, 0, 0, 0, 0],
-# ])
-
-# grid = np.array([
-#     [0, 0, 8, 0, 0, 7, 0, 0, 0],
-#     [4, 0, 0, 8, 0, 0, 9, 6, 0],
-#     [0, 2, 5, 0, 9, 4, 0, 7, 0],
-#     [0, 0, 3, 0, 4, 0, 0, 0, 5],
-#     [0, 0, 0, 7, 0, 3, 0, 0, 0],
-#     [8, 0, 0, 0, 1, 0, 2, 0, 0],
-#     [0, 8, 0, 2, 7, 0, 1, 5, 0],
-#     [0, 1, 6, 0, 0, 8, 0, 0, 9],
-#     [0, 0, 0, 6, 0, 1, 0, 0, 0]
-# ])
-
 json_file = open('../Date/Json/sudoku_de_rezolvat.json', 'r')
 data = json.load(json_file)['Grid']
 data = np.array(data, dtype=np.int64).reshape((9, 9))
@@ -544,14 +506,13 @@ grid = data
 
 sudoku = Sudoku(grid)
 sudoku.get_possibilites_grid(sudoku.grid)
-sudoku.solve_grid(sudoku.grid)
+sudoku.solve_grid()
 
 sudoku_json = {
     "Grid":
         sudoku.grid.flatten().tolist()
 }
 
-print(sudoku_json)
 json_solved_path = "../Date/Json/sudoku_rezolvat.json"
 with open(json_solved_path, "w") as path:
     json.dump(sudoku_json, path)

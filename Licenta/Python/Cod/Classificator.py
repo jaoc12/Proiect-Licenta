@@ -26,6 +26,15 @@ class Classificator:
         self.test_data = []
         self.test_label = []
 
+        # gaseste etichetele pentru fiecare imagine din dataset
+        for digit in range(1, 10):
+            for it in range(2400):
+                self.train_label.append(digit)
+            for it in range(2400, 3000):
+                self.test_label.append(digit)
+        self.train_label = np.array(self.train_label)
+        self.test_label = np.array(self.test_label)
+
         if os.path.exists(self.hog_train_path) is False or os.path.exists(self.hog_test_path) is False:
             for digit in range(1, 10):
                 print(digit)
@@ -33,18 +42,13 @@ class Classificator:
                 for it in range(2400):
                     self.train_data.append(cv2.imread(self.data_path + str(digit) + '/' + str(it) + '.jpg',
                                            cv2.IMREAD_GRAYSCALE))
-                    self.train_label.append(digit)
                 # ultimele 1/5 imagini sunt folosite pentru testare
                 for it in range(2400, 3000):
                     self.test_data.append(cv2.imread(self.data_path + str(digit) + '/' + str(it) + '.jpg',
                                           cv2.IMREAD_GRAYSCALE))
-                    self.test_label.append(digit)
 
             self.train_data = np.array(self.train_data)
-            self.train_label = np.array(self.train_label)
-
             self.test_data = np.array(self.test_data)
-            self.test_label = np.array(self.test_label)
 
     def get_hog(self, data):
         """
@@ -88,8 +92,7 @@ class Classificator:
                 self.test_data = pickle.load(file_hog_test)
 
             # antrenarea unui nou SVM
-            # inca nu este valoarea finala
-            self.svm = SVC(C=0.1, kernel="rbf", verbose=True, decision_function_shape="ovo")
+            self.svm = SVC(C=0.01, kernel="rbf", verbose=True, decision_function_shape="ovr")
             self.svm.fit(self.train_data, self.train_label)
 
             file = open(self.svm_path, "wb")
@@ -111,7 +114,7 @@ class Classificator:
         prepared_cell = cv2.cvtColor(prepared_cell, cv2.COLOR_BGR2GRAY)
         prepared_cell = cv2.blur(prepared_cell, (5, 5))
         prepared_cell = cv2.adaptiveThreshold(prepared_cell, 255,
-                                             cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY_INV, 11, 2)
+                                              cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY_INV, 11, 2)
 
         # cautam contururile din imagine si il selectam pe cel mai mare
         contours, hierarchy = cv2.findContours(prepared_cell, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
@@ -139,7 +142,7 @@ class Classificator:
 
         # calculeaza procentul din imagine care este diferit de zero
         percent = cv2.countNonZero(cell) / float(self.image_size[0] * self.image_size[1])
-        if percent < 0.125:
+        if percent < 0.1:
             return True
         else:
             return False
@@ -164,7 +167,7 @@ class Classificator:
             digit_hog = hog(cell, orientations=9, pixels_per_cell=self.hog_cell_size, cells_per_block=(2, 2))
             return self.svm.predict([digit_hog])[0]
 
-    def get_Sudoku(self):
+    def get_sudoku(self):
         """
         clasifica fiecare imagine a unei celule din Sudoku
         :return: o matrice 9x9 ce reprezinta jocul de Sudoku
@@ -182,13 +185,12 @@ class Classificator:
 
 classificator = Classificator()
 classificator.get_svm()
-sudoku = classificator.get_Sudoku()
+sudoku = classificator.get_sudoku()
 
 sudoku_json = {
     "Grid":
         sudoku.flatten().tolist()
 }
 
-print(sudoku_json)
 with open(classificator.sudoku_path, "w") as path:
     json.dump(sudoku_json, path)
