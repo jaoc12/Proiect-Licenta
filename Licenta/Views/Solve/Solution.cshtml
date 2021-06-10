@@ -8,7 +8,7 @@
 <p>Solutia gasita pentru datele date. Fundal albastru inseamna ca celula era data, iar fundal verde inseamna ca celula a fost gasita.</p>
 
 <table class="table table-bordered">
-    @for(int i=0; i < 9; i++)
+    @for (int i = 0; i < 9; i++)
     {
         <tr>
             @for (int j = 0; j < 9; j++)
@@ -29,3 +29,8 @@
         </tr>
     }
 </table>
+
+@using (Html.BeginForm(actionName: "Detection", controllerName: "Solve", method: FormMethod.Get))
+{
+    <button class="btn btn-primary">Go back</button>
+}

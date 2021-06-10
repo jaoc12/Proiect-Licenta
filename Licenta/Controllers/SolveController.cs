@@ -19,10 +19,7 @@ namespace Licenta.Controllers
         [HttpGet]
         public ActionResult Detection()
         {
-            String jsonName = "sudoku.json";
-            String pathToImages = Server.MapPath("~/Python/Date/Sudoku/");
-
-            String pathToJson = (pathToImages + jsonName);
+            String pathToJson = Server.MapPath("~/Python/Date/Sudoku/sudoku.json");
             String json = System.IO.File.ReadAllText(pathToJson);
             Sudoku sudoku = JsonConvert.DeserializeObject<Sudoku>(json);
 
@@ -32,14 +29,12 @@ namespace Licenta.Controllers
         [HttpPut]
         public ActionResult Solution(Sudoku sudoku)
         {
-            if(ValidateGrid(sudoku) == false)
+            if (ValidateGrid(sudoku) == false)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest, "bad sudoku input");
             }
 
-            string json = JsonConvert.SerializeObject(sudoku);
-            string path = Server.MapPath("~/Python/Date/Json/sudoku_de_rezolvat.json");
-            System.IO.File.WriteAllText(path, json);
+            SaveFiles(sudoku);
 
             RunSolver();
 
@@ -64,6 +59,17 @@ namespace Licenta.Controllers
             }
 
             return View(sudokuSolved);
+        }
+
+        [NonAction]
+        private void SaveFiles(Sudoku sudoku)
+        {
+            String json = JsonConvert.SerializeObject(sudoku);
+            String path = Server.MapPath("~/Python/Date/Json/sudoku_de_rezolvat.json");
+            System.IO.File.WriteAllText(path, json);
+
+            path = Server.MapPath("~/Python/Date/Sudoku/sudoku.json");
+            System.IO.File.WriteAllText(path, json);
         }
 
         [NonAction]
